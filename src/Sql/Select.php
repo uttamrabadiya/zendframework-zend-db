@@ -529,17 +529,17 @@ class Select extends AbstractPreparableSql
                 $parameterContainer,
                 (is_string($columnIndexOrAs) ? $columnIndexOrAs : 'column')
             );
-//var_dump($columnName);
+
             // process As portion
             if (is_string($columnIndexOrAs)) {
                 $columnAs = $platform->quoteIdentifier($columnIndexOrAs);
             } elseif (stripos($columnName, ' as ') === false) {
                 $columnAs = (is_string($column)) ? $platform->quoteIdentifier($column) : 'Expression' . $expr++;
             }
-//            var_dump($columnName);
+
             $columns[] = (isset($columnAs)) ? [$columnName, $columnAs] : [$columnName];
         }
-//var_dump($columns);
+
         // process join columns
         foreach ($this->joins->getJoins() as $join) {
             $joinName = (is_array($join['name'])) ? key($join['name']) : $join['name'];
