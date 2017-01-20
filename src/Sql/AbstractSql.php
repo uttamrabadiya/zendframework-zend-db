@@ -408,15 +408,19 @@ abstract class AbstractSql implements SqlInterface
 
         $startsWithNumber = preg_match('/^[0-9]+/', $column);
         $hasSpaceOrDash = preg_match('/^(.+)(\s|-)+(.+)$/i', $column);
-        if ($isIdentifier && ($startsWithNumber || $hasSpaceOrDash)) {
-            $column = $platform->quoteIdentifier($column);
+        if ($isIdentifier) {
+            if ($startsWithNumber || $hasSpaceOrDash) {
+                $column = $platform->quoteIdentifier($column);
+            } else {
+                $column = $platform->quoteIdentifierInFragment($column);
+            }
+
+            $column = $fromTable . $column;
         } else {
-          $column = $platform->quoteIdentifierInFragment($column);
+            $column = $platform->quoteValue($column);
         }
 
-        return $isIdentifier
-                ? $fromTable . $column
-                : $platform->quoteValue($column);
+        return $column;
     }
 
     /**
