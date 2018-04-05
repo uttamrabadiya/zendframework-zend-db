@@ -429,10 +429,11 @@ abstract class AbstractSql implements SqlInterface
             return 'NULL';
         }
 
-        $startsWithNumber = preg_match('/^[0-9]+/', $column);
-        $hasSpaceOrDash = preg_match('/^(.+)(\s|-)+(.+)$/i', $column);
         if ($isIdentifier) {
-            if ($startsWithNumber || $hasSpaceOrDash) {
+            $startsWithNumber = preg_match('/^[0-9]+/', $column);
+            $hasSpaceOrDash = preg_match('/^(.+)(\s|-)+(.+)$/i', $column);
+            $isUnicode = strlen($column) != mb_strlen($column);
+            if ($startsWithNumber || $hasSpaceOrDash || $isUnicode) {
                 $column = $platform->quoteIdentifier($column);
             } else {
                 $column = $platform->quoteIdentifierInFragment($column);
